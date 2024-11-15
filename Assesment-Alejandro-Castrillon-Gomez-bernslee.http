@@ -1,0 +1,6 @@
+@Assesment_Alejandro_Castrillon_Gomez_bernslee_HostAddress = http://localhost:5054
+
+GET {{Assesment_Alejandro_Castrillon_Gomez_bernslee_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
