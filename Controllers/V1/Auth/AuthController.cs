@@ -72,6 +72,12 @@ namespace Assesment_Alejandro_Castrillon_Gomez_bernslee.Controllers.V1.Auth
 
             return Ok("User registered successfully");
         }
+
+        // Login endpoint
+        [SwaggerOperation(
+            Summary = "User Login",
+            Description = "Authenticates a user by validating the provided credentials (email and password). Returns a JWT token upon successful authentication."
+        )]
         [HttpPost("/api/v1/auth/login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDto)
         {

@@ -73,23 +73,22 @@ builder.Services.AddSingleton<Assesment_Alejandro_Castrillon_Gomez_bernslee.Conf
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "Citas Clínica API",
-        Version = "v1",
-        Description = "API para gestionar citas médicas en una clínica."
-    });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Citas Clinica", Version = "v1" });
 
-    // Añadir soporte para JWT en Swagger
+    // Enable Swagger annotations
+    c.EnableAnnotations();
+
+    // Configure security definition for JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: 'Bearer {token}'",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer"
     });
 
+    // Add security requirement for the API
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -99,32 +98,27 @@ builder.Services.AddSwaggerGen(c =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
-                },
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header
+                }
             },
-            new List<string>()
+            new string[] {}
         }
     });
 });
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Citas Clínica API v1");
-});
-
-// Configurar redirección a Swagger UI
-app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
+}
 
 app.UseHttpsRedirection();
 
-
-app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
